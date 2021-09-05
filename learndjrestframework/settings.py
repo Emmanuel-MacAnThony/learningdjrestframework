@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'toys.apps.ToysConfig',
+    'drones.apps.DronesConfig',
 ]
 
 MIDDLEWARE = [
@@ -79,8 +80,12 @@ WSGI_APPLICATION = 'learndjrestframework.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'drones',
+        'USER': 'versatalien',
+        'PASSWORD': 'feb0699',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 

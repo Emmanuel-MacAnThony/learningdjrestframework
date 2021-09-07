@@ -4,21 +4,21 @@ from drones.models import Drone
 from drones.models import Pilot
 from drones.models import Competition
 
-class DroneCategorySerializer(serializers.HyperLinkedModelSerializer):
-    drones = serializers.HyperLinkedRelatedField(read_only = True, view_name = 'drone-detail', many = True)
+class DroneCategorySerializer(serializers.HyperlinkedModelSerializer):
+    drones = serializers.HyperlinkedRelatedField(read_only = True, view_name = 'drone-detail', many = True)
     
     class Meta: 
         model = DroneCategory
         fields = (
             
-            'url'
+            'url',
             'pk',
             'name',
             'drones',
             
         )
         
-class DroneSerializer(serializers.HyperLinkedModelSerializer): 
+class DroneSerializer(serializers.HyperlinkedModelSerializer): 
     drone_category = serializers.SlugRelatedField(queryset = DroneCategory.objects.all(), slug_field = 'name')
     
     class Meta: 
@@ -33,7 +33,7 @@ class DroneSerializer(serializers.HyperLinkedModelSerializer):
             'inserted_timestamp'
         )
         
-class CompetitionSerializer(serializers.HyperLinkedModelSerializer): 
+class CompetitionSerializer(serializers.HyperlinkedModelSerializer): 
     drone = DroneSerializer()
     
     class Meta:
@@ -47,7 +47,7 @@ class CompetitionSerializer(serializers.HyperLinkedModelSerializer):
             'drone',
         )
         
-class PilotSerializer(serializers.HyperLinkedModelSerializer): 
+class PilotSerializer(serializers.HyperlinkedModelSerializer): 
     competitions = CompetitionSerializer(many = True, read_only = True)
     gender = serializers.ChoiceField(choices = Pilot.GENDER_CHOICES)
     gender_description = serializers.CharField(source = 'get_gender_display', read_only = True)
@@ -60,11 +60,11 @@ class PilotSerializer(serializers.HyperLinkedModelSerializer):
             'gender',
             'gender_description',
             'races_count',
-            'inserted_timestamps',
+            'inserted_timestamp',
             'competitions'
         )
 
-class PilotCompetitionSerializer(serializers.ModelSerializers): 
+class PilotCompetitionSerializer(serializers.ModelSerializer): 
     pilot = serializers.SlugRelatedField(queryset = Pilot.objects.all(), slug_field = 'name')
     drone = serializers.SlugRelatedField(queryset = Drone.objects.all(), slug_field = 'name')
     

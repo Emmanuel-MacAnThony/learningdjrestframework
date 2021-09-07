@@ -8,10 +8,12 @@ from drones.serializers import DroneCategorySerializer
 from drones.serializers import DroneSerializer
 from drones.serializers import PilotSerializer
 from drones.serializers import PilotCompetitionSerializer
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 # Create your views here.
-class DroneCategoryList(generics.ListCreateApiView): 
-    queryset = Drone.objects.all()
+class DroneCategoryList(generics.ListCreateAPIView): 
+    queryset = DroneCategory.objects.all()
     serializer_class = DroneCategorySerializer
     name = 'dronecategory-list'
     
@@ -20,7 +22,7 @@ class DroneCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DroneCategorySerializer
     name = 'dronecategory-detail'
     
-class DroneList(generics.ListCreateApiView): 
+class DroneList(generics.ListCreateAPIView): 
     queryset = Drone.objects.all()
     serializer_class = DroneSerializer
     name = 'drone-list'
@@ -49,3 +51,14 @@ class CompetitionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Competition.objects.all()
     serializer_class = PilotCompetitionSerializer
     name = 'competition-detail'
+    
+class ApiRoot(generics.GenericAPIView): 
+    name ='api-root'
+    def get(self, request, *args, **kwargs): 
+        name = 'api-root'
+        return Response({
+            'drone-categories': reverse(DroneCategoryList.name,request=request),
+            'drones': reverse(DroneList.name, request=request),
+            'pilots': reverse(PilotList.name, request=request),
+            'competitions': reverse(CompetitionList.name, request=request)
+        })
